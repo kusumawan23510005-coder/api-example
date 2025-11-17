@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('catatan', function (Blueprint $table) {
-            $table->id()->autoIncrement();
-            $table->string('judul');
-            $table->text('isi');
-            $table->timestamps();
+        Schema::table('catatan', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
         });
     }
 
@@ -24,6 +21,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('catatans');
+        
+        Schema::table('catatan', function (Blueprint $table) {
+
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
     }
 };
